@@ -1,8 +1,13 @@
 <template>
-  <div>
-    <div v-for="(pokemon, index) in pokemons" :key="index">
-      <img style="height: 150px" :src="pokemon.image" alt="Card image cap">
-      <p>{{ pokemon.name }}</p>
+  <div class="container">
+    <div class="row">
+      <div class="card" style="width: 22rem; margin:10px" v-for="(pokemon, index) in pokemons" :key="index">
+        <img class="card-img-top" style="height: 300px" :src="pokemon.image" alt="Card image cap">
+        <div class="card-body bg-dark">
+          <h5 class="card-title text-white">{{ pokemon.name }}</h5>
+          <a href="#" class="btn btn-primary" style="width: 100%">Detail</a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -24,7 +29,7 @@ export default {
   data(){
       return{
         pokemons:'',
-        myindex: 10
+        myindex: 24
       }
   },
   methods: {
@@ -33,7 +38,7 @@ export default {
         let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
       
         if (bottomOfWindow) {
-          this.myindex = this.myindex + 10
+          this.myindex = this.myindex + 24
         }
       };
     }
