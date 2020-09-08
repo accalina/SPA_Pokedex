@@ -11,8 +11,8 @@
 import gql from 'graphql-tag'
 
 const getPokemonList = gql`
-{
-  pokemons(first: 6){
+query getPokeIndex($pokeindex: Int!){
+  pokemons(first: $pokeindex){
     id
     number
     name
@@ -24,12 +24,32 @@ export default {
   data(){
       return{
         pokemons:'',
+        myindex: 10
       }
   },
-  apollo:{
-    pokemons: {
-      query: getPokemonList,
+  methods: {
+    scroll(){
+      window.onscroll = () => {
+        let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+      
+        if (bottomOfWindow) {
+          this.myindex = this.myindex + 10
+        }
+      };
     }
-  }
+  },
+  mounted(){
+    this.scroll()
+  },
+  apollo:{
+      pokemons: {
+        query: getPokemonList,
+        variables() {
+          return {
+            pokeindex: this.myindex,
+          }
+        },
+      }
+    }
 }
 </script>
