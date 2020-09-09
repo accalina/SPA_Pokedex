@@ -1,17 +1,23 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <PokemonList/>
+
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link :to="{ name: 'Detail', params: { pokename: this.pokename } }">Navigate to Page2</router-link>
+    </div>
+    
+    <router-view />
   </div>
 </template>
 
 <script>
-import PokemonList from "./components/PokemonList.vue";
 
 export default {
   name: 'App',
-  components: {
-    PokemonList
+  data(){
+    return {
+      pokename: "Bulbasaur"
+    }
   }
 }
 </script>
