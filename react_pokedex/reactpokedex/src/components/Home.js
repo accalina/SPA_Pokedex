@@ -109,7 +109,6 @@ export default class Home extends React.Component {
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                   <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                      <button type="button" class="nav-link nes-btn is-primary" onClick={() => this.handleDetail("")}>Home</button><br/><br/>
                     </li>
                   </ul>
                   <div class="form-inline my-2 my-lg-0">
