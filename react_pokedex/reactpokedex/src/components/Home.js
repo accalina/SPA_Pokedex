@@ -12,7 +12,6 @@ export default class Home extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            username: "Accalina",
             pokeindex: 3,
             pokemons: [],
             search: ""
@@ -20,10 +19,6 @@ export default class Home extends React.Component {
     }
     
     // Methods
-    changeUsername(newname){
-      this.setState({username: newname})
-    }
-
     changePokemons(val){
       this.setState({pokemons: val})
     }
@@ -94,7 +89,9 @@ export default class Home extends React.Component {
       return (
         <div>
           Search : <input type="text" value={this.state.search} onChange={ e => this.handleSearch(e.target.value)}/>
-          <button type="button">Find</button><br/><br/>
+          <button type="button"  onClick={() => this.handleDetail(this.state.search)}>Find</button><br/><br/>
+
+
           {this.state.pokemons.filter(searchingFor(this.state.search)).map((pokemon)=>
             <div key={pokemon.id}>
               <div>{pokemon.name}</div>
@@ -102,6 +99,7 @@ export default class Home extends React.Component {
               <button type="button" img={pokemon.image} onClick={() => this.handleDetail(pokemon.name)}>Detail</button>
             </div>
           )}
+
         </div>
       )
     }

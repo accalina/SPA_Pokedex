@@ -6,16 +6,13 @@ export default class Detail extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            username: "Accalina",
             name: "",
             details: [],
-            readyToRender: false
+            readyToRender: false,
+            pokename: ""
         }
     }
     // Methods
-    changeUsername(newname){
-      this.setState({username: newname})
-    }
 
     detailPokemons(val){
       this.setState({details: val, readyToRender: true})
@@ -88,6 +85,7 @@ export default class Detail extends React.Component {
     componentDidMount () {
       let { pokename } = this.props.match.params
       this.getdata(pokename)
+      this.setState({pokename: pokename})
     }
     
     render() {
@@ -95,14 +93,14 @@ export default class Detail extends React.Component {
       const { details } = this.state
       return (
         <div>
-          {readyToRender ? (
+          {readyToRender && details ? (
             <div>
               <h2>Pokemon no. {details.number}</h2>
               <img src={details.image} alt=""/>
               <h2>{details.name}</h2>
             </div>
           ) : (
-            <p>Loading...</p>
+            <p>Pokemon {this.state.pokename} Not Found...</p>
           )}
         </div>
       );
