@@ -12,7 +12,7 @@ export default class Home extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            pokeindex: 3,
+            pokeindex: 24,
             pokemons: [],
             search: ""
         }
@@ -35,7 +35,7 @@ export default class Home extends React.Component {
         let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
       
         if (bottomOfWindow) {
-          this.changePokeindex(this.state.pokeindex + 3)
+          this.changePokeindex(this.state.pokeindex + 24)
         }
       };
     }
@@ -76,9 +76,17 @@ export default class Home extends React.Component {
     }
 
     handleSearch(val){
-      this.setState({
-        search: val
-      })
+      if (val === ""){
+        this.getData(24)
+        this.setState({
+          search: val
+        })
+      }else{
+        this.getData(151)
+        this.setState({
+          search: val
+        })
+      }
     }
 
     componentDidMount(){
@@ -87,20 +95,50 @@ export default class Home extends React.Component {
     }
     render() {
       return (
-        <div>
-          Search : <input type="text" value={this.state.search} onChange={ e => this.handleSearch(e.target.value)}/>
-          <button type="button"  onClick={() => this.handleDetail(this.state.search)}>Find</button><br/><br/>
+        <>
+          <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+              <i class="nes-pokeball" style={{marginRight: "10px"}}></i>
+              <a class="navbar-brand" href="#">Pokedex</a>
+              
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
 
-
-          {this.state.pokemons.filter(searchingFor(this.state.search)).map((pokemon)=>
-            <div key={pokemon.id}>
-              <div>{pokemon.name}</div>
-              <img src={pokemon.image} alt={pokemon.name}></img>
-              <button type="button" img={pokemon.image} onClick={() => this.handleDetail(pokemon.name)}>Detail</button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                  <li class="nav-item active">
+                    <button type="button"  onClick={() => this.handleDetail("")}>Home</button><br/><br/>
+                  </li>
+                </ul>
+                <div class="form-inline my-2 my-lg-0">
+                  Search : <input type="text" value={this.state.search} onChange={ e => this.handleSearch(e.target.value)}/>
+                  <button type="button"  onClick={() => this.handleDetail(this.state.search)}>Find</button><br/><br/>
+                </div>
+              </div>
             </div>
-          )}
+          </nav>
+          <div style={{ marginBottom: "100px" }}></div>
 
-        </div>
+            <div class="container">
+              <div class="row">
+
+                {this.state.pokemons.filter(searchingFor(this.state.search)).map((pokemon)=>
+
+                <div class="card" style={{width: "22rem", margin: "10px"}} key={pokemon.id}>
+                  <img class="card-img-top" style={{height: "300px"}} src={pokemon.image} alt={pokemon.name}></img>
+                  <div class="card-body bg-dark">
+                    <h5 class="card-title text-white">{ pokemon.name}</h5>
+                    <button type="button" class="btn btn-primary" img={pokemon.image} onClick={() => this.handleDetail(pokemon.name)}>Detail</button>
+                  </div>
+                </div>
+
+                )}
+              </div>
+            </div>
+
+
+        </>
       )
     }
 }

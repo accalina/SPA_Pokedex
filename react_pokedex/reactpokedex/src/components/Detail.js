@@ -9,7 +9,7 @@ export default class Detail extends React.Component {
             name: "",
             details: [],
             readyToRender: false,
-            pokename: ""
+            pokename: "",
         }
     }
     // Methods
@@ -99,8 +99,11 @@ export default class Detail extends React.Component {
               <img src={details.image} alt=""/>
               <h2>{details.name}</h2>
             </div>
+          ) : (details ? (
+            <p>Loading...</p>
           ) : (
-            <p>Pokemon {this.state.pokename} Not Found...</p>
+            <p>Pokemon not found</p>
+          )
           )}
         </div>
       );
