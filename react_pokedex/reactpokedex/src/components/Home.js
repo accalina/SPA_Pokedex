@@ -14,7 +14,8 @@ export default class Home extends React.Component {
         this.state = {
             pokeindex: 24,
             pokemons: [],
-            search: ""
+            search: "",
+            fetchAllData: false
         }
     }
     
@@ -78,14 +79,14 @@ export default class Home extends React.Component {
     handleSearch(val){
       if (val === ""){
         this.getData(24)
-        this.setState({
-          search: val
-        })
+        this.setState({fetchAllData: false, search: val})
       }else{
-        this.getData(151)
-        this.setState({
-          search: val
-        })
+        if (!this.state.fetchAllData) {
+          this.getData(151)
+          this.setState({fetchAllData: true, search: val}, ()=>{})
+        }else{
+          this.setState({search: val})
+        }
       }
     }
 
