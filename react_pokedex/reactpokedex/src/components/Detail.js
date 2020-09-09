@@ -92,7 +92,7 @@ export default class Detail extends React.Component {
       const readyToRender = this.state.readyToRender
       const { details } = this.state
       return (
-        <div>
+        <div id="app">
           {readyToRender && details ? (
             <div>
               <h2>Pokemon no. {details.number}</h2>
