@@ -99,8 +99,8 @@ export default class Home extends React.Component {
           <div id="app">
             <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
               <div class="container">
-                <i class="nes-pokeball" style={{marginRight: "10px"}}></i>
-                <a class="navbar-brand" href="#">Pokedex</a>
+                <i class="nes-pokeball" style={{marginRight: "10px"}} onClick={() => this.props.history.push({pathname: `/`})}></i>
+                <p class="navbar-brand" onClick={() => this.props.history.push({pathname: `/`})}> Pokedex </p>
                 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
