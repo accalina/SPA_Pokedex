@@ -4,6 +4,7 @@ import router from './router'
 
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "nes.css/css/nes.min.css";
 
 import VueApollo from 'vue-apollo'
 import ApolloClient from "apollo-client";

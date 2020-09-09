@@ -5,7 +5,7 @@
         <img class="card-img-top" style="height: 300px" :src="pokemon.image" alt="Card image cap">
         <div class="card-body bg-dark">
           <h5 class="card-title text-white">{{ pokemon.name }}</h5>
-          <router-link :to="{ name: 'Detail', params: { pokename: pokemon.name } }" class="btn btn-primary" style="width: 100%">Detail</router-link>
+          <router-link :to="{ name: 'Detail', params: { pokename: pokemon.name } }" class="nes-btn is-primary" style="width: 100%">Detail</router-link>
         </div>
       </div>
     </div>
