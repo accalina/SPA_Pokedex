@@ -1,0 +1,8 @@
+version: "3.5"
+services: 
+    pokedex_react:
+        image: accalina/pokedex_react
+        container_name: pokedex_react
+        ports: 
+            - "80:3000"
+        command: sh -c "serve -p 3000 -s ."
