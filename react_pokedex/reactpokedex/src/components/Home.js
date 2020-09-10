@@ -4,7 +4,17 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 
 function searchingFor(temp){
   return function(x){
-    return x.name.toLowerCase().includes(temp.toLowerCase()) || !temp
+    const testresult = x.name.toLowerCase().includes(temp.toLowerCase()) || !temp
+    return testresult
+  }
+}
+
+function searchingForPoketype(temp){
+  return function(x){
+    const test = x.types.filter((item) => {
+      return item.toLowerCase().includes(temp.toLowerCase()) || !temp
+    })
+    if (test != ""){return true} else {return false}
   }
 }
 
@@ -15,7 +25,10 @@ export default class Home extends React.Component {
             pokeindex: 24,
             pokemons: [],
             search: "",
-            fetchAllData: false
+            filterType: false,
+            poketype: "",
+            fetchAllData: false,
+            navbarFilter: false
         }
     }
     
@@ -54,6 +67,8 @@ export default class Home extends React.Component {
           number
           name
           image
+          number
+          types
         }
       }`
 
@@ -81,12 +96,21 @@ export default class Home extends React.Component {
         this.getData(24)
         this.setState({fetchAllData: false, search: val})
       }else{
-        if (!this.state.fetchAllData) {
-          this.getData(151)
-          this.setState({fetchAllData: true, search: val}, ()=>{})
-        }else{
-          this.setState({search: val})
-        }
+        this.getData(151)
+        this.setState({fetchAllData: true, search: val}, ()=>{})
+      }
+    }
+
+    startFiltering(val){
+      if (val === "none"){
+        this.getData(24)
+        this.setState({fetchAllData: false, poketype: "", filterType: false}, ()=>{})
+      }else if (val === "back"){
+        this.getData(24)
+        this.setState({navbarFilter: false})
+      }else{
+        this.getData(151)
+        this.setState({fetchAllData: true, poketype: val, filterType: true}, ()=>{})
       }
     }
 
@@ -98,42 +122,88 @@ export default class Home extends React.Component {
       return (
         <>
           <div id="app">
-            <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-              <div class="container">
-                <i class="nes-pokeball" style={{marginRight: "10px"}} onClick={() => this.props.history.push({pathname: `/`})}></i>
-                <p class="navbar-brand" onClick={() => this.props.history.push({pathname: `/`})}> Pokedex </p>
+            <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+              <div className="container">
+                <i className="nes-pokeball" style={{marginRight: "10px"}} onClick={() => this.props.history.push({pathname: `/`})}></i>
+                <p className="navbar-brand" onClick={() => this.props.history.push({pathname: `/`})}> Pokedex </p>
                 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
+                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span className="navbar-toggler-icon"></span>
                 </button>
+                
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                    </li>
+                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul className="navbar-nav mr-auto">
+                    <li className="nav-item active"></li>
                   </ul>
-                  <div class="form-inline my-2 my-lg-0">
-                    Search : <input type="text" value={this.state.search} onChange={ e => this.handleSearch(e.target.value)}/>
-                    <button type="button" class="nav-link nes-btn is-success"  onClick={() => this.handleDetail(this.state.search)}>Find</button><br/><br/>
+
+                  
+
+                  {this.state.navbarFilter ? (
+                    
+                    <div className="form-inline my-2 my-lg-0">
+                    <label for="success_select">Filter</label>
+                    <div class="nes-select is-success">
+                      <select required id="success_select" value={this.state.poketype} onChange={ e => this.startFiltering(e.target.value)}>
+                      <option value="none">Clear Filter</option>
+                      <option value="back">Back to Search</option>
+                      <option value="Grass">Grass</option>
+                      <option value="Fire">Fire</option>
+                      <option value="Water">Water</option>
+                      <option value="Poison">Poison</option>
+                      <option value="Bug">Bug</option>
+                      <option value="Dark">Dark</option>
+                      <option value="Dragon">Dragon</option>
+                      <option value="Electric">Electric</option>
+                      <option value="Fairy">Fairy</option>
+                      <option value="Fighting">Fighting</option>
+                      <option value="Flying">Flying</option>
+                      <option value="Ghost">Ghost</option>
+                      <option value="Ground">Ground</option>
+                      <option value="Ice">Ice</option>
+                      <option value="Normal">Normal</option>
+                      <option value="Psychic">Psychic</option>
+                      <option value="Rock">Rock</option>
+                      <option value="Steel">Steel</option>
+                      </select>
+                    </div>
                   </div>
+                  ): (
+                    <div className="form-inline my-2 my-lg-0">
+                    <div className="nes-field"><input className="nes-input" placeholder="Search" type="text" value={this.state.search} onChange={ e => this.handleSearch(e.target.value)}/></div>
+                    <button type="button" className="nav-link nes-btn is-success" style={{marginLeft: "10px"}} onClick={() => this.handleDetail(this.state.search)}>Find</button><br/><br/>
+                    <button type="button" className="nav-link nes-btn is-warning" style={{marginLeft: "10px"}}  onClick={() => this.setState({navbarFilter: true})}>Filter</button><br/><br/>
+                  </div>
+                  )}
+                  
+
+                  
                 </div>
               </div>
             </nav>
             <div style={{ marginBottom: "100px" }}></div>
-            <div class="container">
-              <div class="row">
+            <div className="container">
+              <div className="row">
 
-                {this.state.pokemons.filter(searchingFor(this.state.search)).map((pokemon)=>
-
-                <div class="card" style={{width: "22rem", margin: "10px"}} key={pokemon.id}>
-                  <img class="card-img-top" style={{height: "300px"}} src={pokemon.image} alt={pokemon.name}></img>
-                  <div class="card-body bg-dark">
-                    <h5 class="card-title text-white">{ pokemon.name}</h5>
-                    <button type="button" class="nav-link nes-btn is-primary" img={pokemon.image} onClick={() => this.handleDetail(pokemon.name)}>Detail</button>
+                {this.state.filterType ? (this.state.pokemons.filter(searchingForPoketype(this.state.poketype)).map((pokemon)=>
+                <div className="card" style={{width: "22rem", margin: "10px"}} key={pokemon.id}>
+                  <img className="card-img-top" style={{height: "300px"}} src={pokemon.image} alt={pokemon.name}></img>
+                  <div className="card-body bg-dark">
+                    <h5 className="card-title text-white">{ pokemon.name}</h5>
+                    <button type="button" className="nav-link nes-btn is-primary" img={pokemon.image} onClick={() => this.handleDetail(pokemon.name)}>Detail</button>
                   </div>
                 </div>
+                )): (this.state.pokemons.filter(searchingFor(this.state.search)).map((pokemon)=>
+                      <div className="card" style={{width: "22rem", margin: "10px"}} key={pokemon.id}>
+                        <img className="card-img-top" style={{height: "300px"}} src={pokemon.image} alt={pokemon.name}></img>
+                        <div className="card-body bg-dark">
+                          <h5 className="card-title text-white">{ pokemon.name}</h5>
+                          <button type="button" className="nav-link nes-btn is-primary" img={pokemon.image} onClick={() => this.handleDetail(pokemon.name)}>Detail</button>
+                        </div>
+                      </div>
+                ))}
 
-                )}
+
               </div>
             </div>
           </div>
